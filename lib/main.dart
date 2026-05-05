@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
 
 final List<Task> sampleTasks = [
   Task(
-    title: 'Купити продукти',
+    title: 'Поснідати',
     time: '09:00',
     priorityColor: Colors.red,
     isDone: true,
@@ -39,7 +39,7 @@ final List<Task> sampleTasks = [
     priorityColor: Colors.orange,
   ),
   Task(
-    title: 'Прийти на лекцію',
+    title: 'Купити продукти',
     priorityColor: Colors.green,
   ),
   Task(
@@ -49,8 +49,13 @@ final List<Task> sampleTasks = [
   ),
   Task(
     title: 'Підготувати звіт',
-    time: '15:00',
+    time: '20:00',
     priorityColor: Colors.red,
+  ),
+  Task(
+    title: 'Вечеря з родиною',
+    time: '19:00',
+    priorityColor: Colors.orange,
   ),
 ];
 
@@ -73,19 +78,30 @@ final List<TaskList> sampleLists = [
   TaskList(
     name: 'Family',
     color: const Color(0xFFFF7043),
-    tasks: [sampleTasks[3]],
+    tasks: [sampleTasks[3], sampleTasks[5]],
   ),
 ];
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  void _toggleTask(int index) {
+    setState(() {
+      sampleTasks[index].isDone = !sampleTasks[index].isDone;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Tasks',
+          'Мої задачі',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFF3F51B5),
@@ -135,7 +151,10 @@ class HomeScreen extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: sampleTasks.length,
               itemBuilder: (context, index) {
-                return TaskItem(task: sampleTasks[index]);
+                return TaskItem(
+                  task: sampleTasks[index],
+                  onToggle: () => _toggleTask(index),
+                );
               },
             ),
             const SizedBox(height: 24),
